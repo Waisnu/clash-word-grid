@@ -2,87 +2,123 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Word Clash Aurora Design System - All colors MUST be HSL */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Aurora Theme - Deep space with flowing gradients */
+    --background: 222 84% 4.9%;
+    --foreground: 210 40% 98%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 222 84% 4.9%;
+    --card-foreground: 210 40% 98%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 217 32% 17%;
+    --popover-foreground: 210 40% 98%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Aurora Primary - Bright teal/cyan */
+    --primary: 180 100% 70%;
+    --primary-foreground: 222 84% 4.9%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Aurora Secondary - Deep purple */
+    --secondary: 270 60% 20%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Aurora Accent - Bright purple */
+    --accent: 270 100% 80%;
+    --accent-foreground: 222 84% 4.9%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Muted - Subtle aurora glow */
+    --muted: 240 15% 15%;
+    --muted-foreground: 220 15% 70%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 240 15% 25%;
+    --input: 240 15% 15%;
+    --ring: 180 100% 70%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
+    /* Aurora Gradient Colors */
+    --aurora-blue: 220 100% 60%;
+    --aurora-teal: 180 100% 70%;
+    --aurora-purple: 270 100% 80%;
+    --aurora-pink: 320 100% 80%;
+
+    /* Game-specific colors */
+    --game-success: 120 60% 50%;
+    --game-warning: 45 100% 60%;
+    --game-player-1: 180 100% 70%;
+    --game-player-2: 270 100% 80%;
+    --game-player-3: 320 100% 80%;
+    --game-player-4: 60 100% 70%;
+
+    /* Aurora Background Gradients */
+    --aurora-bg: linear-gradient(135deg, 
+      hsl(222, 84%, 4.9%) 0%,
+      hsl(240, 60%, 8%) 25%,
+      hsl(270, 40%, 12%) 50%,
+      hsl(220, 50%, 10%) 75%,
+      hsl(222, 84%, 4.9%) 100%);
+    
+    --aurora-flow: linear-gradient(45deg,
+      hsl(var(--aurora-teal)) 0%,
+      hsl(var(--aurora-purple)) 50%,
+      hsl(var(--aurora-pink)) 100%);
+      
+    --aurora-subtle: linear-gradient(135deg,
+      hsla(var(--aurora-blue), 0.1) 0%,
+      hsla(var(--aurora-teal), 0.1) 33%,
+      hsla(var(--aurora-purple), 0.1) 66%,
+      hsla(var(--aurora-pink), 0.1) 100%);
+
+    /* Game grid background */
+    --grid-bg: linear-gradient(135deg,
+      hsla(240, 15%, 15%, 0.8) 0%,
+      hsla(270, 15%, 18%, 0.8) 100%);
+
+    /* Shadows with aurora glow */
+    --shadow-aurora: 0 4px 20px hsla(var(--aurora-teal), 0.3);
+    --shadow-intense: 0 8px 40px hsla(var(--aurora-purple), 0.4);
+    --shadow-success: 0 4px 20px hsla(var(--game-success), 0.3);
+
+    /* Transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Sidebar (keep existing) */
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    /* Aurora theme is already dark-based, so minimal changes needed */
+    --background: 222 84% 4.9%;
     --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
+    --card: 222 84% 4.9%;
     --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
+    --popover: 217 32% 17%;
     --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
+    --primary: 180 100% 70%;
+    --primary-foreground: 222 84% 4.9%;
+    --secondary: 270 60% 20%;
     --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
+    --muted: 240 15% 15%;
+    --muted-foreground: 220 15% 70%;
+    --accent: 270 100% 80%;
+    --accent-foreground: 222 84% 4.9%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --border: 240 15% 25%;
+    --input: 240 15% 15%;
+    --ring: 180 100% 70%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -101,5 +137,45 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    background: var(--aurora-bg);
+  }
+}
+
+@layer utilities {
+  /* Fade animations */
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Word found celebration */
+  .animate-word-found {
+    animation: wordFound 0.6s ease-out;
+  }
+  
+  @keyframes wordFound {
+    0% {
+      transform: scale(1);
+      background: hsl(var(--game-success));
+    }
+    50% {
+      transform: scale(1.2);
+      background: hsl(var(--game-success));
+      box-shadow: 0 0 20px hsla(var(--game-success), 0.6);
+    }
+    100% {
+      transform: scale(1);
+      background: hsl(var(--game-success));
+    }
   }
 }

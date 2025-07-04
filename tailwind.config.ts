@@ -61,7 +61,33 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Aurora theme colors
+				aurora: {
+					blue: 'hsl(var(--aurora-blue))',
+					teal: 'hsl(var(--aurora-teal))',
+					purple: 'hsl(var(--aurora-purple))',
+					pink: 'hsl(var(--aurora-pink))'
+				},
+				game: {
+					success: 'hsl(var(--game-success))',
+					warning: 'hsl(var(--game-warning))',
+					player1: 'hsl(var(--game-player-1))',
+					player2: 'hsl(var(--game-player-2))',
+					player3: 'hsl(var(--game-player-3))',
+					player4: 'hsl(var(--game-player-4))'
 				}
+			},
+			backgroundImage: {
+				'aurora-bg': 'var(--aurora-bg)',
+				'aurora-flow': 'var(--aurora-flow)',
+				'aurora-subtle': 'var(--aurora-subtle)',
+				'grid-bg': 'var(--grid-bg)'
+			},
+			boxShadow: {
+				'aurora': 'var(--shadow-aurora)',
+				'intense': 'var(--shadow-intense)',
+				'success': 'var(--shadow-success)'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -84,11 +110,61 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'aurora-flow': {
+					'0%': {
+						transform: 'translateX(-100%) rotate(0deg)',
+						opacity: '0.3'
+					},
+					'50%': {
+						transform: 'translateX(50%) rotate(180deg)',
+						opacity: '0.8'
+					},
+					'100%': {
+						transform: 'translateX(100%) rotate(360deg)',
+						opacity: '0.3'
+					}
+				},
+				'pulse-glow': {
+					'0%, 100%': {
+						opacity: '0.4',
+						transform: 'scale(1)'
+					},
+					'50%': {
+						opacity: '0.8',
+						transform: 'scale(1.05)'
+					}
+				},
+				'float': {
+					'0%, 100%': {
+						transform: 'translateY(0px)'
+					},
+					'50%': {
+						transform: 'translateY(-10px)'
+					}
+				},
+				'word-found': {
+					'0%': {
+						transform: 'scale(1)',
+						opacity: '1'
+					},
+					'50%': {
+						transform: 'scale(1.2)',
+						opacity: '0.8'
+					},
+					'100%': {
+						transform: 'scale(1)',
+						opacity: '1'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'aurora-flow': 'aurora-flow 8s linear infinite',
+				'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
+				'float': 'float 3s ease-in-out infinite',
+				'word-found': 'word-found 0.6s ease-out'
 			}
 		}
 	},
