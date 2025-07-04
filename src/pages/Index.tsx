@@ -2,26 +2,44 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { CreateGameModal } from '@/components/CreateGameModal';
+import { GameSetupModal, GameSettings } from '@/components/GameSetupModal';
 import { GameLobby } from '@/components/GameLobby';
 import { GameBoard } from '@/components/GameBoard';
+import { GameOverModal } from '@/components/GameOverModal';
+import { generateGameCode, generateRandomPlayerName } from '@/utils/gameUtils';
+import { Play } from 'lucide-react';
 
-type GameState = 'home' | 'creating' | 'lobby' | 'playing' | 'results';
+type GameState = 'home' | 'setup' | 'lobby' | 'playing' | 'gameOver';
 
 const Index = () => {
   const [gameState, setGameState] = useState<GameState>('home');
   const [gameCode, setGameCode] = useState('');
   const [joinCode, setJoinCode] = useState('');
   const [playerName, setPlayerName] = useState('');
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [gameSettings, setGameSettings] = useState<GameSettings | null>(null);
+  const [isSetupModalOpen, setIsSetupModalOpen] = useState(false);
+  const [setupMode, setSetupMode] = useState<'single' | 'multi'>('multi');
+  const [isGameOverModalOpen, setIsGameOverModalOpen] = useState(false);
+  const [gameStats, setGameStats] = useState({ score: 0, totalWords: 0, timeElapsed: 0 });
 
-  const handleCreateGame = (name: string) => {
-    setPlayerName(name);
-    // Generate random 4-letter code
-    const code = Math.random().toString(36).substring(2, 6).toUpperCase();
-    setGameCode(code);
-    setGameState('lobby');
-    setIsCreateModalOpen(false);
+  const handleCreateGame = (isSinglePlayer: boolean) => {
+    setSetupMode(isSinglePlayer ? 'single' : 'multi');
+    setIsSetupModalOpen(true);
+  };
+
+  const handleGameSetup = (settings: GameSettings) => {
+    const randomName = generateRandomPlayerName();
+    setPlayerName(randomName);
+    setGameSettings(settings);
+    setIsSetupModalOpen(false);
+    
+    if (settings.isSinglePlayer) {
+      setGameState('playing');
+    } else {
+      const code = generateGameCode();
+      setGameCode(code);
+      setGameState('lobby');
+    }
   };
 
   const handleJoinGame = () => {
@@ -35,17 +53,44 @@ const Index = () => {
     setGameState('playing');
   };
 
-  const renderAuroraBackground = () => (
+  const handleGameEnd = (stats?: { score: number; totalWords: number; timeElapsed: number }) => {
+    if (stats) {
+      setGameStats(stats);
+    }
+    setGameState('gameOver');
+    setIsGameOverModalOpen(true);
+  };
+
+  const handlePlayAgain = () => {
+    setIsGameOverModalOpen(false);
+    if (gameSettings?.isSinglePlayer) {
+      setGameState('playing');
+    } else {
+      setGameState('lobby');
+    }
+  };
+
+  const handleBackToHome = () => {
+    setGameState('home');
+    setGameCode('');
+    setJoinCode('');
+    setPlayerName('');
+    setGameSettings(null);
+    setIsGameOverModalOpen(false);
+  };
+
+  const renderEnhancedAuroraBackground = () => (
     <>
       {/* Main aurora background */}
-      <div className="fixed inset-0 bg-aurora-bg" />
+      <div className="fixed inset-0 bg-aurora-bg grain" />
       
-      {/* Animated aurora layers */}
+      {/* Animated aurora layers with enhanced effects */}
       <div className="fixed inset-0 overflow-hidden">
-        <div className="absolute -top-40 -left-40 w-80 h-80 bg-aurora-flow rounded-full opacity-20 animate-aurora-flow" />
-        <div className="absolute top-20 -right-20 w-60 h-60 bg-gradient-to-br from-aurora-purple to-aurora-pink rounded-full opacity-15 animate-pulse-glow" />
-        <div className="absolute -bottom-20 left-1/4 w-96 h-96 bg-gradient-to-tr from-aurora-teal to-aurora-blue rounded-full opacity-10 animate-float" />
-        <div className="absolute top-1/3 right-1/4 w-40 h-40 bg-aurora-subtle rounded-full opacity-25 animate-pulse-glow" style={{ animationDelay: '1s' }} />
+        <div className="absolute -top-40 -left-40 w-96 h-96 bg-aurora-flow rounded-full opacity-20 animate-aurora-flow float-slow" />
+        <div className="absolute top-20 -right-20 w-80 h-80 bg-gradient-to-br from-aurora-purple to-aurora-pink rounded-full opacity-15 pulse-aurora" />
+        <div className="absolute -bottom-20 left-1/4 w-[500px] h-[500px] bg-gradient-to-tr from-aurora-teal to-aurora-blue rounded-full opacity-10 animate-float" />
+        <div className="absolute top-1/3 right-1/4 w-60 h-60 bg-aurora-subtle rounded-full opacity-25 pulse-aurora" style={{ animationDelay: '2s' }} />
+        <div className="absolute bottom-1/4 left-1/3 w-40 h-40 bg-gradient-to-br from-aurora-pink to-aurora-purple rounded-full opacity-20 float-slow" style={{ animationDelay: '3s' }} />
       </div>
     </>
   );
@@ -53,11 +98,11 @@ const Index = () => {
   if (gameState === 'playing') {
     return (
       <div className="min-h-screen relative">
-        {renderAuroraBackground()}
+        {renderEnhancedAuroraBackground()}
         <GameBoard 
           gameCode={gameCode} 
           playerName={playerName}
-          onGameEnd={() => setGameState('results')}
+          onGameEnd={handleGameEnd}
         />
       </div>
     );
@@ -66,12 +111,12 @@ const Index = () => {
   if (gameState === 'lobby') {
     return (
       <div className="min-h-screen relative">
-        {renderAuroraBackground()}
+        {renderEnhancedAuroraBackground()}
         <GameLobby 
           gameCode={gameCode} 
           playerName={playerName}
           onStartGame={handleStartGame}
-          onLeaveGame={() => setGameState('home')}
+          onLeaveGame={handleBackToHome}
         />
       </div>
     );
@@ -79,48 +124,55 @@ const Index = () => {
 
   return (
     <div className="min-h-screen relative flex items-center justify-center p-4">
-      {renderAuroraBackground()}
+      {renderEnhancedAuroraBackground()}
       
       {/* Main content */}
-      <div className="relative z-10 w-full max-w-md space-y-8">
-        {/* Logo and title */}
-        <div className="text-center space-y-4">
-          <div className="inline-block p-4 rounded-full bg-aurora-subtle backdrop-blur-sm animate-pulse-glow">
-            <div className="w-16 h-16 bg-aurora-flow rounded-full" />
+      <div className="relative z-10 w-full max-w-lg space-y-8 animate-fade-in">
+        {/* Enhanced Logo and title */}
+        <div className="text-center space-y-6">
+          <div className="inline-block p-6 rounded-full glass-card pulse-aurora">
+            <div className="w-20 h-20 bg-aurora-flow rounded-full animate-pulse-glow" />
           </div>
           <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-aurora-teal via-aurora-purple to-aurora-pink bg-clip-text text-transparent">
+            <h1 className="text-5xl font-bold bg-gradient-to-r from-aurora-teal via-aurora-purple to-aurora-pink bg-clip-text text-transparent mb-4">
               Word Clash
             </h1>
-            <p className="text-muted-foreground mt-2">
+            <p className="text-xl text-muted-foreground">
               Real-time multiplayer word search battle
             </p>
           </div>
         </div>
 
-        {/* Game actions */}
+        {/* Enhanced Game actions */}
         <div className="space-y-4">
-          {/* Create Game */}
-          <Card className="bg-card/80 backdrop-blur-sm border-border/50 shadow-aurora">
-            <CardHeader>
-              <CardTitle className="text-center">Start a New Game</CardTitle>
-              <CardDescription className="text-center">
-                Create a room and invite friends to join
-              </CardDescription>
+          {/* Start Game - Primary CTA */}
+          <Card className="glass-card hover:shadow-intense transition-all duration-300 transform hover:scale-105">
+            <CardHeader className="text-center pb-4">
+              <CardTitle className="text-2xl flex items-center justify-center gap-3">
+                <Play className="w-6 h-6 text-aurora-teal" />
+                START GAME
+              </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-3">
               <Button 
-                onClick={() => setIsCreateModalOpen(true)}
-                className="w-full bg-aurora-flow hover:shadow-intense transition-all duration-300"
+                onClick={() => handleCreateGame(true)}
+                className="w-full bg-aurora-flow hover:shadow-intense transition-all duration-300 text-lg py-6"
                 size="lg"
               >
-                Create Game
+                🎯 Single Player
+              </Button>
+              <Button 
+                onClick={() => handleCreateGame(false)}
+                className="w-full bg-gradient-to-r from-aurora-purple to-aurora-pink hover:shadow-intense transition-all duration-300 text-lg py-6"
+                size="lg"
+              >
+                👥 Create Multiplayer Room
               </Button>
             </CardContent>
           </Card>
 
           {/* Join Game */}
-          <Card className="bg-card/80 backdrop-blur-sm border-border/50 shadow-aurora">
+          <Card className="glass-card hover:shadow-aurora transition-all duration-300">
             <CardHeader>
               <CardTitle className="text-center">Join a Game</CardTitle>
               <CardDescription className="text-center">
@@ -128,25 +180,25 @@ const Index = () => {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <Input
                   placeholder="Your name"
                   value={playerName}
                   onChange={(e) => setPlayerName(e.target.value)}
-                  className="bg-input/50 backdrop-blur-sm"
+                  className="glass-card border-aurora-teal/30 focus:border-aurora-teal"
                 />
                 <Input
-                  placeholder="Game code (e.g. ABCD)"
+                  placeholder="4-digit room code"
                   value={joinCode}
-                  onChange={(e) => setJoinCode(e.target.value.toUpperCase().slice(0, 4))}
-                  className="bg-input/50 backdrop-blur-sm text-center text-lg font-mono tracking-widest"
+                  onChange={(e) => setJoinCode(e.target.value.slice(0, 4))}
+                  className="glass-card border-aurora-purple/30 focus:border-aurora-purple text-center text-xl font-mono tracking-widest"
                 />
               </div>
               <Button 
                 onClick={handleJoinGame}
                 disabled={!joinCode || joinCode.length !== 4 || !playerName}
                 variant="secondary"
-                className="w-full"
+                className="w-full glass-card hover:shadow-aurora transition-all duration-300"
                 size="lg"
               >
                 Join Game
@@ -155,16 +207,35 @@ const Index = () => {
           </Card>
         </div>
 
-        {/* Footer */}
-        <div className="text-center text-sm text-muted-foreground">
-          <p>Compete to find words faster than your friends!</p>
+        {/* Enhanced Footer */}
+        <div className="text-center space-y-2">
+          <p className="text-muted-foreground">
+            🧩 Compete to find words faster than your friends!
+          </p>
+          <div className="flex justify-center gap-4 text-sm text-muted-foreground">
+            <span>• 10x10 Grid</span>
+            <span>• Real-time</span>
+            <span>• Multiple Topics</span>
+          </div>
         </div>
       </div>
 
-      <CreateGameModal 
-        isOpen={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
-        onConfirm={handleCreateGame}
+      {/* Modals */}
+      <GameSetupModal 
+        isOpen={isSetupModalOpen}
+        onClose={() => setIsSetupModalOpen(false)}
+        onConfirm={handleGameSetup}
+        isSinglePlayer={setupMode === 'single'}
+      />
+
+      <GameOverModal
+        isOpen={isGameOverModalOpen}
+        onClose={handleBackToHome}
+        onPlayAgain={handlePlayAgain}
+        score={gameStats.score}
+        totalWords={gameStats.totalWords}
+        timeElapsed={gameStats.timeElapsed}
+        isSinglePlayer={gameSettings?.isSinglePlayer || false}
       />
     </div>
   );

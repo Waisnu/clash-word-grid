@@ -55,7 +55,7 @@
     --game-player-3: 320 100% 80%;
     --game-player-4: 60 100% 70%;
 
-    /* Aurora Background Gradients */
+    /* Enhanced Aurora Background Gradients with Glassmorphism */
     --aurora-bg: linear-gradient(135deg, 
       hsl(222, 84%, 4.9%) 0%,
       hsl(240, 60%, 8%) 25%,
@@ -63,26 +63,36 @@
       hsl(220, 50%, 10%) 75%,
       hsl(222, 84%, 4.9%) 100%);
     
-    --aurora-flow: linear-gradient(45deg,
+    --aurora-flow: linear-gradient(135deg,
       hsl(var(--aurora-teal)) 0%,
       hsl(var(--aurora-purple)) 50%,
       hsl(var(--aurora-pink)) 100%);
       
     --aurora-subtle: linear-gradient(135deg,
-      hsla(var(--aurora-blue), 0.1) 0%,
-      hsla(var(--aurora-teal), 0.1) 33%,
-      hsla(var(--aurora-purple), 0.1) 66%,
-      hsla(var(--aurora-pink), 0.1) 100%);
+      hsla(var(--aurora-blue), 0.15) 0%,
+      hsla(var(--aurora-teal), 0.15) 33%,
+      hsla(var(--aurora-purple), 0.15) 66%,
+      hsla(var(--aurora-pink), 0.15) 100%);
+
+    --glass-card: linear-gradient(135deg,
+      hsla(240, 15%, 25%, 0.2) 0%,
+      hsla(270, 15%, 30%, 0.1) 100%);
+      
+    --glass-border: linear-gradient(135deg,
+      hsla(var(--aurora-teal), 0.3) 0%,
+      hsla(var(--aurora-purple), 0.3) 50%,
+      hsla(var(--aurora-pink), 0.3) 100%);
 
     /* Game grid background */
     --grid-bg: linear-gradient(135deg,
       hsla(240, 15%, 15%, 0.8) 0%,
       hsla(270, 15%, 18%, 0.8) 100%);
 
-    /* Shadows with aurora glow */
-    --shadow-aurora: 0 4px 20px hsla(var(--aurora-teal), 0.3);
-    --shadow-intense: 0 8px 40px hsla(var(--aurora-purple), 0.4);
-    --shadow-success: 0 4px 20px hsla(var(--game-success), 0.3);
+    /* Enhanced Shadows with glassmorphism */
+    --shadow-aurora: 0 8px 32px hsla(var(--aurora-teal), 0.4), 0 0 0 1px hsla(var(--aurora-teal), 0.1);
+    --shadow-intense: 0 20px 60px hsla(var(--aurora-purple), 0.5), 0 0 0 1px hsla(var(--aurora-purple), 0.2);
+    --shadow-success: 0 8px 32px hsla(var(--game-success), 0.4);
+    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 
     /* Transitions */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -142,40 +152,95 @@
 }
 
 @layer utilities {
-  /* Fade animations */
+  /* Enhanced animations with glassmorphism */
   .animate-fade-in {
-    animation: fadeIn 0.5s ease-out forwards;
+    animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   }
   
   @keyframes fadeIn {
     from {
       opacity: 0;
-      transform: translateY(10px);
+      transform: translateY(20px) scale(0.95);
+      filter: blur(10px);
     }
     to {
       opacity: 1;
-      transform: translateY(0);
+      transform: translateY(0) scale(1);
+      filter: blur(0);
     }
+  }
+  
+  /* Glass card effect */
+  .glass-card {
+    background: var(--glass-card);
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid transparent;
+    border-image: var(--glass-border) 1;
+    box-shadow: var(--shadow-glass);
+  }
+  
+  /* Pulsing aurora glow */
+  .pulse-aurora {
+    animation: pulseAurora 3s ease-in-out infinite;
+  }
+  
+  @keyframes pulseAurora {
+    0%, 100% {
+      box-shadow: 0 0 20px hsla(var(--aurora-teal), 0.3);
+      transform: scale(1);
+    }
+    50% {
+      box-shadow: 0 0 40px hsla(var(--aurora-purple), 0.6);
+      transform: scale(1.02);
+    }
+  }
+  
+  /* Floating animation */
+  .float-slow {
+    animation: floatSlow 6s ease-in-out infinite;
+  }
+  
+  @keyframes floatSlow {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    33% { transform: translateY(-10px) rotate(1deg); }
+    66% { transform: translateY(5px) rotate(-1deg); }
   }
   
   /* Word found celebration */
   .animate-word-found {
-    animation: wordFound 0.6s ease-out;
+    animation: wordFound 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   @keyframes wordFound {
     0% {
       transform: scale(1);
       background: hsl(var(--game-success));
+      filter: brightness(1);
     }
     50% {
-      transform: scale(1.2);
+      transform: scale(1.3);
       background: hsl(var(--game-success));
-      box-shadow: 0 0 20px hsla(var(--game-success), 0.6);
+      box-shadow: 0 0 30px hsla(var(--game-success), 0.8);
+      filter: brightness(1.5);
     }
     100% {
       transform: scale(1);
       background: hsl(var(--game-success));
+      filter: brightness(1);
     }
+  }
+  
+  /* Grainy texture overlay */
+  .grain::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
   }
 }

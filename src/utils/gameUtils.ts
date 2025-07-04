@@ -1,10 +1,10 @@
 // Game utility functions for Word Clash
 
 export const generateGameCode = (): string => {
-  return Math.random().toString(36).substring(2, 6).toUpperCase();
+  return Math.floor(1000 + Math.random() * 9000).toString();
 };
 
-export const generateWordGrid = (size: number = 5): string[][] => {
+export const generateWordGrid = (size: number = 10): string[][] => {
   const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   const grid: string[][] = [];
   
@@ -90,4 +90,82 @@ export const getPlayerColor = (playerIndex: number): string => {
   ];
   
   return colors[playerIndex % colors.length];
+};
+
+export const generateRandomPlayerName = (): string => {
+  const adjectives = [
+    'Swift', 'Clever', 'Brave', 'Mighty', 'Silent', 'Golden', 'Shadow', 'Crystal',
+    'Storm', 'Flame', 'Frost', 'Thunder', 'Lightning', 'Cosmic', 'Mystic', 'Royal'
+  ];
+  
+  const animals = [
+    'Wolf', 'Eagle', 'Tiger', 'Dragon', 'Phoenix', 'Falcon', 'Panther', 'Lion',
+    'Shark', 'Hawk', 'Fox', 'Bear', 'Raven', 'Cobra', 'Jaguar', 'Octopus'
+  ];
+  
+  const adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
+  const animal = animals[Math.floor(Math.random() * animals.length)];
+  const number = Math.floor(Math.random() * 999) + 1;
+  
+  return `${adjective}${animal}${number}`;
+};
+
+export const getRandomCharacterEmoji = (): string => {
+  const characters = ['🐙', '🐌', '🦄', '🐸', '🦊', '🐺', '🦁', '🐯', '🐨', '🐼', '🦝', '🦉', '🐧', '🦅', '🐳', '🦈'];
+  return characters[Math.floor(Math.random() * characters.length)];
+};
+
+export const getPuzzleTopics = () => {
+  return [
+    {
+      id: 'animals',
+      name: 'Animals',
+      emoji: '🐾',
+      words: {
+        easy: ['CAT', 'DOG', 'BIRD', 'FISH', 'FROG', 'BEAR', 'LION', 'DUCK'],
+        medium: ['TIGER', 'ELEPHANT', 'DOLPHIN', 'PENGUIN', 'RABBIT', 'MONKEY', 'GIRAFFE', 'TURTLE'],
+        hard: ['BUTTERFLY', 'CROCODILE', 'FLAMINGO', 'RHINOCEROS', 'KANGAROO', 'CHIMPANZEE', 'HIPPOPOTAMUS', 'OCTOPUS']
+      }
+    },
+    {
+      id: 'space',
+      name: 'Space',
+      emoji: '🚀',
+      words: {
+        easy: ['STAR', 'MOON', 'SUN', 'MARS', 'EARTH', 'SPACE', 'COMET', 'ORBIT'],
+        medium: ['PLANET', 'GALAXY', 'ROCKET', 'SATURN', 'JUPITER', 'METEOR', 'NEBULA', 'COSMOS'],
+        hard: ['TELESCOPE', 'ASTRONAUT', 'CONSTELLATION', 'SPACECRAFT', 'ASTEROID', 'BLACKHOLE', 'SUPERNOVA', 'ATMOSPHERE']
+      }
+    },
+    {
+      id: 'food',
+      name: 'Food',
+      emoji: '🍕',
+      words: {
+        easy: ['PIZZA', 'BREAD', 'APPLE', 'CAKE', 'MILK', 'RICE', 'MEAT', 'EGG'],
+        medium: ['BURGER', 'PASTA', 'CHEESE', 'BANANA', 'ORANGE', 'CHICKEN', 'SALMON', 'COOKIE'],
+        hard: ['SPAGHETTI', 'SANDWICH', 'CHOCOLATE', 'STRAWBERRY', 'BLUEBERRY', 'HAMBURGER', 'PINEAPPLE', 'WATERMELON']
+      }
+    },
+    {
+      id: 'sports',
+      name: 'Sports',
+      emoji: '⚽',
+      words: {
+        easy: ['BALL', 'GOAL', 'GAME', 'TEAM', 'WIN', 'RUN', 'JUMP', 'PLAY'],
+        medium: ['SOCCER', 'TENNIS', 'HOCKEY', 'BOXING', 'GOLF', 'RUGBY', 'TRACK', 'FIELD'],
+        hard: ['BASKETBALL', 'FOOTBALL', 'BASEBALL', 'SWIMMING', 'VOLLEYBALL', 'BADMINTON', 'WRESTLING', 'MARATHON']
+      }
+    }
+  ];
+};
+
+export const getTimeLimitForDifficulty = (difficulty: 'easy' | 'medium' | 'hard'): number => {
+  const timeLimits = {
+    easy: 300,    // 5 minutes
+    medium: 900,  // 15 minutes
+    hard: 1500    // 25 minutes
+  };
+  
+  return timeLimits[difficulty];
 };

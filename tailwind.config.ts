@@ -82,12 +82,15 @@ export default {
 				'aurora-bg': 'var(--aurora-bg)',
 				'aurora-flow': 'var(--aurora-flow)',
 				'aurora-subtle': 'var(--aurora-subtle)',
-				'grid-bg': 'var(--grid-bg)'
+				'grid-bg': 'var(--grid-bg)',
+				'glass-card': 'var(--glass-card)',
+				'glass-border': 'var(--glass-border)'
 			},
 			boxShadow: {
 				'aurora': 'var(--shadow-aurora)',
 				'intense': 'var(--shadow-intense)',
-				'success': 'var(--shadow-success)'
+				'success': 'var(--shadow-success)',
+				'glass': 'var(--shadow-glass)'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
