@@ -25,9 +25,10 @@ export const GameOverModal = ({
 }: GameOverModalProps) => {
   const [hasRated, setHasRated] = useState(false);
   
-  // Calculate performance rating (1-5 stars)
-  const wordsFound = Math.floor(score / 10);
-  const completionRate = totalWords > 0 ? (wordsFound / totalWords) * 100 : 0;
+  // Calculate performance rating (1-5 stars) - Fixed NaN bug
+  const wordsFound = Math.floor((score || 0) / 10);
+  const totalWordsCount = totalWords || 1; // Prevent division by zero
+  const completionRate = (wordsFound / totalWordsCount) * 100;
   
   let rating = 1;
   let message = "Keep trying! Every puzzle makes you smarter! 🧠";
@@ -56,8 +57,8 @@ export const GameOverModal = ({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="glass-card grain border-0 max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-center text-2xl bg-gradient-to-r from-aurora-teal to-aurora-purple bg-clip-text text-transparent">
-            Game Over!
+          <DialogTitle className="text-center text-2xl bg-gradient-to-r from-lovable-blue to-lovable-coral bg-clip-text text-transparent">
+            🎉 Game Complete!
           </DialogTitle>
         </DialogHeader>
         
@@ -76,7 +77,7 @@ export const GameOverModal = ({
                 />
               ))}
             </div>
-            <p className="text-lg font-medium text-aurora-teal">
+            <p className="text-lg font-medium text-lovable-coral">
               {message}
             </p>
           </div>
@@ -85,11 +86,11 @@ export const GameOverModal = ({
           <div className="glass-card p-4 rounded-lg space-y-3">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <div className="text-2xl font-bold text-aurora-purple">{score}</div>
+                <div className="text-2xl font-bold text-lovable-coral">{score || 0}</div>
                 <div className="text-sm text-muted-foreground">Total Score</div>
               </div>
               <div>
-                <div className="text-2xl font-bold text-aurora-teal">{wordsFound}</div>
+                <div className="text-2xl font-bold text-lovable-blue">{wordsFound}</div>
                 <div className="text-sm text-muted-foreground">Words Found</div>
               </div>
             </div>
@@ -104,7 +105,7 @@ export const GameOverModal = ({
 
           {/* Achievement Badge */}
           {rating >= 4 && (
-            <Badge className="bg-gradient-to-r from-aurora-purple to-aurora-pink text-background text-lg px-4 py-2 animate-pulse-glow">
+            <Badge className="bg-gradient-to-r from-lovable-blue to-lovable-coral text-background text-lg px-4 py-2 animate-pulse-glow">
               🏆 High Achiever!
             </Badge>
           )}
@@ -120,7 +121,7 @@ export const GameOverModal = ({
             </Button>
             <Button
               onClick={onPlayAgain}
-              className="flex-1 bg-aurora-flow hover:shadow-intense transition-all duration-300"
+              className="flex-1 bg-lovable-flow hover:shadow-intense transition-all duration-300"
             >
               Play Again
             </Button>

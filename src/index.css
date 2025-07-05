@@ -6,7 +6,7 @@
 
 @layer base {
   :root {
-    /* Aurora Theme - Deep space with flowing gradients */
+    /* Lovable Signature Gradient Theme - Deep blue to vibrant coral/pink */
     --background: 222 84% 4.9%;
     --foreground: 210 40% 98%;
 
@@ -16,32 +16,40 @@
     --popover: 217 32% 17%;
     --popover-foreground: 210 40% 98%;
 
-    /* Aurora Primary - Bright teal/cyan */
-    --primary: 180 100% 70%;
-    --primary-foreground: 222 84% 4.9%;
+    /* Lovable Primary - Deep blue */
+    --primary: 220 100% 50%;
+    --primary-foreground: 210 40% 98%;
 
-    /* Aurora Secondary - Deep purple */
-    --secondary: 270 60% 20%;
+    /* Lovable Secondary - Deep blue variant */
+    --secondary: 230 60% 20%;
     --secondary-foreground: 210 40% 98%;
 
-    /* Aurora Accent - Bright purple */
-    --accent: 270 100% 80%;
+    /* Lovable Accent - Vibrant coral */
+    --accent: 15 100% 70%;
     --accent-foreground: 222 84% 4.9%;
 
-    /* Muted - Subtle aurora glow */
-    --muted: 240 15% 15%;
+    /* Muted - Subtle blue glow */
+    --muted: 230 15% 15%;
     --muted-foreground: 220 15% 70%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 240 15% 25%;
-    --input: 240 15% 15%;
-    --ring: 180 100% 70%;
+    --border: 230 15% 25%;
+    --input: 230 15% 15%;
+    --ring: 220 100% 50%;
 
     --radius: 0.75rem;
 
-    /* Aurora Gradient Colors */
+    /* Lovable Signature Colors */
+    --lovable-blue: 220 100% 50%;
+    --lovable-blue-light: 220 100% 60%;
+    --lovable-blue-dark: 220 100% 40%;
+    --lovable-coral: 15 100% 70%;
+    --lovable-coral-light: 15 100% 75%;
+    --lovable-pink: 340 100% 75%;
+    
+    /* Aurora Colors (Legacy) */
     --aurora-blue: 220 100% 60%;
     --aurora-teal: 180 100% 70%;
     --aurora-purple: 270 100% 80%;
@@ -55,44 +63,53 @@
     --game-player-3: 320 100% 80%;
     --game-player-4: 60 100% 70%;
 
-    /* Enhanced Aurora Background Gradients with Glassmorphism */
-    --aurora-bg: linear-gradient(135deg, 
+    /* Lovable Signature Background Gradients with Enhanced Glassmorphism */
+    --lovable-bg: linear-gradient(135deg, 
       hsl(222, 84%, 4.9%) 0%,
-      hsl(240, 60%, 8%) 25%,
-      hsl(270, 40%, 12%) 50%,
-      hsl(220, 50%, 10%) 75%,
+      hsl(230, 70%, 8%) 20%,
+      hsl(220, 80%, 12%) 40%,
+      hsl(230, 60%, 10%) 60%,
+      hsl(225, 70%, 8%) 80%,
       hsl(222, 84%, 4.9%) 100%);
     
-    --aurora-flow: linear-gradient(135deg,
-      hsl(var(--aurora-teal)) 0%,
-      hsl(var(--aurora-purple)) 50%,
-      hsl(var(--aurora-pink)) 100%);
+    --lovable-flow: linear-gradient(135deg,
+      hsl(var(--lovable-blue)) 0%,
+      hsl(var(--lovable-coral)) 50%,
+      hsl(var(--lovable-pink)) 100%);
       
-    --aurora-subtle: linear-gradient(135deg,
-      hsla(var(--aurora-blue), 0.15) 0%,
-      hsla(var(--aurora-teal), 0.15) 33%,
-      hsla(var(--aurora-purple), 0.15) 66%,
-      hsla(var(--aurora-pink), 0.15) 100%);
+    --lovable-subtle: linear-gradient(135deg,
+      hsla(var(--lovable-blue), 0.15) 0%,
+      hsla(var(--lovable-coral), 0.12) 50%,
+      hsla(var(--lovable-pink), 0.15) 100%);
+      
+    /* Legacy aurora gradients */
+    --aurora-bg: var(--lovable-bg);
+    --aurora-flow: var(--lovable-flow);
+    --aurora-subtle: var(--lovable-subtle);
 
     --glass-card: linear-gradient(135deg,
-      hsla(240, 15%, 25%, 0.2) 0%,
-      hsla(270, 15%, 30%, 0.1) 100%);
+      hsla(230, 20%, 25%, 0.25) 0%,
+      hsla(220, 25%, 30%, 0.15) 100%);
       
     --glass-border: linear-gradient(135deg,
-      hsla(var(--aurora-teal), 0.3) 0%,
-      hsla(var(--aurora-purple), 0.3) 50%,
-      hsla(var(--aurora-pink), 0.3) 100%);
+      hsla(var(--lovable-blue), 0.4) 0%,
+      hsla(var(--lovable-coral), 0.3) 50%,
+      hsla(var(--lovable-pink), 0.4) 100%);
 
     /* Game grid background */
     --grid-bg: linear-gradient(135deg,
       hsla(240, 15%, 15%, 0.8) 0%,
       hsla(270, 15%, 18%, 0.8) 100%);
 
-    /* Enhanced Shadows with glassmorphism */
-    --shadow-aurora: 0 8px 32px hsla(var(--aurora-teal), 0.4), 0 0 0 1px hsla(var(--aurora-teal), 0.1);
-    --shadow-intense: 0 20px 60px hsla(var(--aurora-purple), 0.5), 0 0 0 1px hsla(var(--aurora-purple), 0.2);
+    /* Enhanced Shadows with Lovable glassmorphism */
+    --shadow-lovable: 0 8px 32px hsla(var(--lovable-blue), 0.4), 0 0 0 1px hsla(var(--lovable-blue), 0.1);
+    --shadow-intense: 0 20px 60px hsla(var(--lovable-coral), 0.5), 0 0 0 1px hsla(var(--lovable-coral), 0.2);
     --shadow-success: 0 8px 32px hsla(var(--game-success), 0.4);
-    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    --shadow-word-found: 0 0 30px hsla(var(--game-success), 0.8), 0 0 60px hsla(var(--game-success), 0.4);
+    
+    /* Legacy aurora shadows */
+    --shadow-aurora: var(--shadow-lovable);
 
     /* Transitions */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -147,7 +164,23 @@
 
   body {
     @apply bg-background text-foreground;
-    background: var(--aurora-bg);
+    background: var(--lovable-bg);
+    position: relative;
+  }
+  
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      radial-gradient(circle at 20% 80%, hsla(var(--lovable-blue), 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, hsla(var(--lovable-coral), 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, hsla(var(--lovable-pink), 0.1) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: -1;
   }
 }
 
@@ -170,13 +203,28 @@
     }
   }
   
-  /* Glass card effect */
+  /* Enhanced Glass card effect with noise */
   .glass-card {
     background: var(--glass-card);
     backdrop-filter: blur(20px) saturate(180%);
     border: 1px solid transparent;
     border-image: var(--glass-border) 1;
     box-shadow: var(--shadow-glass);
+    position: relative;
+  }
+  
+  .glass-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.05;
+    pointer-events: none;
+    border-radius: inherit;
+    z-index: 1;
   }
   
   /* Pulsing aurora glow */
@@ -206,27 +254,62 @@
     66% { transform: translateY(5px) rotate(-1deg); }
   }
   
-  /* Word found celebration */
+  /* Enhanced Word found celebration with streak effects */
   .animate-word-found {
-    animation: wordFound 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: wordFoundExplosion 1.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
-  @keyframes wordFound {
+  @keyframes wordFoundExplosion {
     0% {
       transform: scale(1);
       background: hsl(var(--game-success));
       filter: brightness(1);
+      box-shadow: none;
+    }
+    25% {
+      transform: scale(1.4);
+      background: hsl(var(--game-success));
+      box-shadow: var(--shadow-word-found);
+      filter: brightness(2) saturate(1.5);
     }
     50% {
-      transform: scale(1.3);
+      transform: scale(1.6) rotate(5deg);
+      background: linear-gradient(45deg, hsl(var(--game-success)), hsl(var(--lovable-coral)));
+      box-shadow: var(--shadow-word-found), 0 0 60px hsla(var(--lovable-coral), 0.6);
+      filter: brightness(2.5) saturate(2);
+    }
+    75% {
+      transform: scale(1.2) rotate(-2deg);
       background: hsl(var(--game-success));
-      box-shadow: 0 0 30px hsla(var(--game-success), 0.8);
-      filter: brightness(1.5);
+      box-shadow: var(--shadow-word-found);
+      filter: brightness(1.8) saturate(1.3);
     }
     100% {
       transform: scale(1);
       background: hsl(var(--game-success));
-      filter: brightness(1);
+      filter: brightness(1.2);
+      box-shadow: 0 0 20px hsla(var(--game-success), 0.4);
+    }
+  }
+  
+  /* Streak effect for consecutive words */
+  .animate-streak {
+    animation: streakBonus 0.6s ease-out;
+  }
+  
+  @keyframes streakBonus {
+    0% {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.2) translateY(-10px);
+      opacity: 0.8;
+      filter: brightness(1.5);
+    }
+    100% {
+      transform: scale(1) translateY(0);
+      opacity: 1;
     }
   }
   

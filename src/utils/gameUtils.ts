@@ -19,6 +19,25 @@ export const generateWordGrid = (size: number = 10): string[][] => {
   return grid;
 };
 
+export const getWordsForDifficulty = (
+  topic: string, 
+  difficulty: 'easy' | 'medium' | 'hard', 
+  count: number = 12
+): string[] => {
+  const topics = getPuzzleTopics();
+  const selectedTopic = topics.find(t => t.id === topic);
+  
+  if (!selectedTopic) {
+    return [];
+  }
+  
+  const wordsPool = selectedTopic.words[difficulty];
+  
+  // Shuffle and take the requested count
+  const shuffled = [...wordsPool].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, Math.min(count, wordsPool.length));
+};
+
 export const generateWordList = (difficulty: 'easy' | 'medium' | 'hard' = 'medium'): string[] => {
   const wordLists = {
     easy: ['CAT', 'DOG', 'RUN', 'SUN', 'TOP', 'BAG', 'CUP', 'HAT'],
@@ -38,13 +57,56 @@ export const validateWordSelection = (
     return { isValid: false };
   }
   
+  // Check if selection forms a valid line (horizontal, vertical, or diagonal)
+  if (!isValidSelectionLine(selectedCells)) {
+    return { isValid: false };
+  }
+  
   const word = selectedCells.map(cell => grid[cell.row][cell.col]).join('');
-  const isValidWord = wordList.includes(word.toUpperCase());
+  const reverseWord = [...selectedCells].reverse().map(cell => grid[cell.row][cell.col]).join('');
+  
+  const isValidWord = wordList.includes(word.toUpperCase()) || wordList.includes(reverseWord.toUpperCase());
+  const finalWord = wordList.includes(word.toUpperCase()) ? word.toUpperCase() : reverseWord.toUpperCase();
   
   return {
     isValid: isValidWord,
-    word: isValidWord ? word.toUpperCase() : undefined
+    word: isValidWord ? finalWord : undefined
   };
+};
+
+const isValidSelectionLine = (cells: { row: number; col: number }[]): boolean => {
+  if (cells.length < 2) return false;
+  
+  const first = cells[0];
+  const second = cells[1];
+  
+  const deltaRow = second.row - first.row;
+  const deltaCol = second.col - first.col;
+  
+  // Check if it's a valid direction (horizontal, vertical, or diagonal)
+  if (deltaRow === 0) {
+    // Horizontal - all cells should have same row, consecutive columns
+    const expectedCol = deltaCol > 0 ? 1 : -1;
+    return cells.every((cell, i) => 
+      cell.row === first.row && cell.col === first.col + i * expectedCol
+    );
+  } else if (deltaCol === 0) {
+    // Vertical - all cells should have same column, consecutive rows
+    const expectedRow = deltaRow > 0 ? 1 : -1;
+    return cells.every((cell, i) => 
+      cell.col === first.col && cell.row === first.row + i * expectedRow
+    );
+  } else if (Math.abs(deltaRow) === Math.abs(deltaCol)) {
+    // Diagonal - row and column changes should be equal
+    const expectedRowDelta = deltaRow > 0 ? 1 : -1;
+    const expectedColDelta = deltaCol > 0 ? 1 : -1;
+    return cells.every((cell, i) => 
+      cell.row === first.row + i * expectedRowDelta && 
+      cell.col === first.col + i * expectedColDelta
+    );
+  }
+  
+  return false;
 };
 
 export const checkDirection = (
