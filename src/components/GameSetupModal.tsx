@@ -37,7 +37,7 @@ export const GameSetupModal = ({ isOpen, onClose, onConfirm, isSinglePlayer }: G
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="glass-card grain border-0 max-w-2xl">
+      <DialogContent className="glass-card grain border-0 w-[95vw] max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-center text-2xl bg-gradient-to-r from-aurora-teal to-aurora-purple bg-clip-text text-transparent">
             {isSinglePlayer ? 'Single Player Setup' : 'Multiplayer Setup'}
@@ -48,14 +48,14 @@ export const GameSetupModal = ({ isOpen, onClose, onConfirm, isSinglePlayer }: G
           {/* Difficulty Selection */}
           <div className="space-y-3">
             <h3 className="text-lg font-semibold text-center">Choose Difficulty</h3>
-            <div className="flex gap-2 justify-center">
+            <div className="flex flex-col sm:flex-row gap-2 justify-center">
               {(['easy', 'medium', 'hard'] as const).map((diff) => (
                 <Button
                   key={diff}
                   variant={difficulty === diff ? 'default' : 'outline'}
                   onClick={() => setDifficulty(diff)}
                   className={`
-                    capitalize px-6 py-3 transition-all duration-300
+                    capitalize px-4 py-3 transition-all duration-300 w-full sm:w-auto
                     ${difficulty === diff 
                       ? 'bg-aurora-flow text-background shadow-intense' 
                       : 'glass-card hover:shadow-aurora'
@@ -63,7 +63,7 @@ export const GameSetupModal = ({ isOpen, onClose, onConfirm, isSinglePlayer }: G
                   `}
                 >
                   {diff}
-                  <Badge variant="secondary" className="ml-2 bg-aurora-subtle">
+                  <Badge variant="secondary" className="ml-2 bg-aurora-subtle text-xs">
                     {Math.floor(getTimeLimitForDifficulty(diff) / 60)}min
                   </Badge>
                 </Button>
@@ -74,7 +74,7 @@ export const GameSetupModal = ({ isOpen, onClose, onConfirm, isSinglePlayer }: G
           {/* Topic Selection */}
           <div className="space-y-3">
             <h3 className="text-lg font-semibold text-center">Select Puzzle Topic</h3>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {topics.map((topic) => (
                 <Card
                   key={topic.id}

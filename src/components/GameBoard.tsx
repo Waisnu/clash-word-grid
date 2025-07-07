@@ -76,14 +76,41 @@ export const GameBoard = ({
     }
   }, [timeLeft, onGameEnd, foundWords, startTime, WORDS_TO_FIND.length]);
 
-  // Enhanced mouse handling for smooth word selection
-  const handleMouseDown = useCallback((row: number, col: number) => {
+  // Add custom animations to index.css
+  useEffect(() => {
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes word-found {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.2); background-color: hsl(var(--game-success)); }
+        100% { transform: scale(1); }
+      }
+      @keyframes streak {
+        0%, 100% { box-shadow: 0 0 0 0 hsl(var(--lovable-coral) / 0.7); }
+        50% { box-shadow: 0 0 0 10px hsl(var(--lovable-coral) / 0); }
+      }
+      .animate-word-found {
+        animation: word-found 0.6s ease-in-out;
+      }
+      .animate-streak {
+        animation: streak 1s ease-in-out;
+      }
+    `;
+    document.head.appendChild(style);
+    
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+
+  // Enhanced mouse and touch handling for smooth word selection
+  const handleStart = useCallback((row: number, col: number) => {
     setIsSelecting(true);
     setSelectedCells([{ row, col }]);
     setCurrentWord(GAME_GRID[row][col]);
   }, [GAME_GRID]);
 
-  const handleMouseEnter = useCallback((row: number, col: number) => {
+  const handleMove = useCallback((row: number, col: number) => {
     if (isSelecting) {
       // Create a smooth path from start to current position
       const startCell = selectedCells[0];
@@ -95,7 +122,7 @@ export const GameBoard = ({
     }
   }, [isSelecting, selectedCells, GAME_GRID]);
 
-  const handleMouseUp = useCallback(() => {
+  const handleEnd = useCallback(() => {
     if (isSelecting && selectedCells.length > 1) {
       const validation = validateWordSelection(selectedCells, GAME_GRID, PLACED_WORDS);
       
@@ -111,20 +138,36 @@ export const GameBoard = ({
         // Update streak
         setStreak(prev => prev + 1);
         
-        // Enhanced animations
+        // Enhanced animations with staggered effect
         selectedCells.forEach((cell, index) => {
           setTimeout(() => {
             const cellElement = document.querySelector(`[data-cell="${cell.row}-${cell.col}"]`);
             if (cellElement) {
-              cellElement.classList.add('animate-word-found');
+              cellElement.classList.add('animate-word-found', 'animate-bounce');
               // Add streak effect if applicable
               if (streak >= 2) {
                 setTimeout(() => cellElement.classList.add('animate-streak'), 300);
               }
+              // Remove animation classes after completion
+              setTimeout(() => {
+                cellElement.classList.remove('animate-word-found', 'animate-bounce', 'animate-streak');
+              }, 1000);
             }
           }, index * 50);
         });
       } else {
+        // Visual feedback for invalid word
+        selectedCells.forEach((cell) => {
+          const cellElement = document.querySelector(`[data-cell="${cell.row}-${cell.col}"]`) as HTMLElement;
+          if (cellElement) {
+            cellElement.classList.add('animate-pulse');
+            cellElement.style.backgroundColor = 'rgba(239, 68, 68, 0.3)';
+            setTimeout(() => {
+              cellElement.classList.remove('animate-pulse');
+              cellElement.style.backgroundColor = '';
+            }, 500);
+          }
+        });
         // Reset streak on invalid word
         setStreak(0);
       }
@@ -135,31 +178,72 @@ export const GameBoard = ({
     setCurrentWord('');
   }, [isSelecting, selectedCells, GAME_GRID, PLACED_WORDS, foundWords, playerName, streak]);
 
-  // Create smooth path between two points
+  // Touch event handlers for mobile support
+  const handleTouchStart = useCallback((e: React.TouchEvent, row: number, col: number) => {
+    e.preventDefault();
+    handleStart(row, col);
+  }, [handleStart]);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    e.preventDefault();
+    if (isSelecting) {
+      const touch = e.touches[0];
+      const element = document.elementFromPoint(touch.clientX, touch.clientY);
+      if (element && element.hasAttribute('data-cell')) {
+        const cellData = element.getAttribute('data-cell')?.split('-');
+        if (cellData && cellData.length === 2) {
+          const row = parseInt(cellData[0]);
+          const col = parseInt(cellData[1]);
+          handleMove(row, col);
+        }
+      }
+    }
+  }, [isSelecting, handleMove]);
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    e.preventDefault();
+    handleEnd();
+  }, [handleEnd]);
+
+  // Enhanced smooth path creation with better validation
   const createSmoothPath = (start: { row: number; col: number }, end: { row: number; col: number }) => {
-    const path: { row: number; col: number }[] = [start];
+    const path: { row: number; col: number }[] = [];
+    
+    // Always include the start point
+    path.push(start);
+    
+    // If start and end are the same, return just the start
+    if (start.row === end.row && start.col === end.col) {
+      return path;
+    }
     
     const deltaRow = end.row - start.row;
     const deltaCol = end.col - start.col;
+    const absDeltaRow = Math.abs(deltaRow);
+    const absDeltaCol = Math.abs(deltaCol);
     
-    // Determine if it's a valid direction
-    if (deltaRow === 0) {
-      // Horizontal
+    // Check if it's a valid direction (horizontal, vertical, or diagonal)
+    const isHorizontal = deltaRow === 0;
+    const isVertical = deltaCol === 0;
+    const isDiagonal = absDeltaRow === absDeltaCol;
+    
+    if (isHorizontal) {
+      // Horizontal line
       const step = deltaCol > 0 ? 1 : -1;
       for (let col = start.col + step; col !== end.col + step; col += step) {
         path.push({ row: start.row, col });
       }
-    } else if (deltaCol === 0) {
-      // Vertical
+    } else if (isVertical) {
+      // Vertical line
       const step = deltaRow > 0 ? 1 : -1;
       for (let row = start.row + step; row !== end.row + step; row += step) {
         path.push({ row, col: start.col });
       }
-    } else if (Math.abs(deltaRow) === Math.abs(deltaCol)) {
-      // Diagonal
+    } else if (isDiagonal) {
+      // Diagonal line
       const rowStep = deltaRow > 0 ? 1 : -1;
       const colStep = deltaCol > 0 ? 1 : -1;
-      const steps = Math.abs(deltaRow);
+      const steps = absDeltaRow;
       
       for (let i = 1; i <= steps; i++) {
         path.push({
@@ -168,10 +252,9 @@ export const GameBoard = ({
         });
       }
     } else {
-      // Invalid direction, return just start and end
-      if (end.row !== start.row || end.col !== start.col) {
-        path.push(end);
-      }
+      // Invalid direction - create a path that shows the selection is invalid
+      // but still provides visual feedback
+      path.push(end);
     }
     
     return path;
@@ -229,9 +312,9 @@ export const GameBoard = ({
           </Card>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-6">
+        <div className="grid lg:grid-cols-3 gap-4 lg:gap-6">
           {/* Game Grid */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 order-2 lg:order-1">
             <Card className="bg-grid-bg backdrop-blur-sm border-border/50 shadow-aurora">
               <CardHeader>
                 <CardTitle className="text-center">Find the Words!</CardTitle>
@@ -245,8 +328,10 @@ export const GameBoard = ({
               </CardHeader>
               <CardContent>
                 <div 
-                  className="grid grid-cols-10 gap-1 max-w-2xl mx-auto select-none"
-                  onMouseLeave={handleMouseUp}
+                  className="grid grid-cols-10 gap-1 max-w-2xl mx-auto select-none touch-none"
+                  onMouseLeave={handleEnd}
+                  onTouchMove={handleTouchMove}
+                  onTouchEnd={handleTouchEnd}
                 >
                   {GAME_GRID.map((row, rowIndex) =>
                     row.map((letter, colIndex) => (
@@ -254,17 +339,18 @@ export const GameBoard = ({
                         key={`${rowIndex}-${colIndex}`}
                         data-cell={`${rowIndex}-${colIndex}`}
                         className={`
-                          w-8 h-8 bg-muted/50 backdrop-blur-sm border border-border/50 
-                          rounded-md flex items-center justify-center text-sm font-bold
-                          cursor-pointer transition-all duration-200 hover:scale-110
+                          w-8 h-8 sm:w-10 sm:h-10 bg-muted/50 backdrop-blur-sm border border-border/50 
+                          rounded-md flex items-center justify-center text-sm sm:text-base font-bold
+                          cursor-pointer transition-all duration-200 hover:scale-110 active:scale-95
                           ${isCellSelected(rowIndex, colIndex) 
-                            ? 'bg-lovable-flow text-background shadow-lovable scale-110 z-10' 
-                            : 'hover:bg-muted/70'
+                            ? 'bg-lovable-flow text-background shadow-lovable scale-110 z-10 animate-pulse-glow' 
+                            : 'hover:bg-muted/70 hover:shadow-md'
                           }
                         `}
-                        onMouseDown={() => handleMouseDown(rowIndex, colIndex)}
-                        onMouseEnter={() => handleMouseEnter(rowIndex, colIndex)}
-                        onMouseUp={handleMouseUp}
+                        onMouseDown={() => handleStart(rowIndex, colIndex)}
+                        onMouseEnter={() => handleMove(rowIndex, colIndex)}
+                        onMouseUp={handleEnd}
+                        onTouchStart={(e) => handleTouchStart(e, rowIndex, colIndex)}
                       >
                         {letter}
                       </div>
@@ -285,7 +371,7 @@ export const GameBoard = ({
           </div>
 
           {/* Sidebar */}
-          <div className="space-y-4">
+          <div className="space-y-4 order-1 lg:order-2">
             {/* Enhanced Scoreboard */}
             <Card className="bg-card/80 backdrop-blur-sm border-border/50 shadow-lovable">
               <CardHeader>

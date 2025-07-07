@@ -23,7 +23,7 @@ export const CreateGameModal = ({ isOpen, onClose, onConfirm }: CreateGameModalP
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-card/95 backdrop-blur-sm border-border/50 shadow-intense">
+      <DialogContent className="glass-card grain border-0 w-[95vw] max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-center bg-gradient-to-r from-aurora-teal to-aurora-purple bg-clip-text text-transparent">
             Create New Game
@@ -46,7 +46,7 @@ export const CreateGameModal = ({ isOpen, onClose, onConfirm }: CreateGameModalP
             />
           </div>
           
-          <div className="flex gap-2 pt-4">
+          <div className="flex flex-col sm:flex-row gap-2 pt-4">
             <Button
               type="button"
               variant="secondary"

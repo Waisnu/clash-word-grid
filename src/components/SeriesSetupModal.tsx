@@ -49,7 +49,7 @@ export const SeriesSetupModal = ({ isOpen, onClose, onConfirm, isSinglePlayer }:
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="glass-card grain border-0 max-w-3xl">
+      <DialogContent className="glass-card grain border-0 w-[95vw] max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-center text-2xl bg-gradient-to-r from-lovable-blue to-lovable-coral bg-clip-text text-transparent flex items-center justify-center gap-3">
             <Trophy className="w-6 h-6 text-lovable-coral" />
@@ -91,7 +91,7 @@ export const SeriesSetupModal = ({ isOpen, onClose, onConfirm, isSinglePlayer }:
           {/* Difficulty Selection */}
           <div className="space-y-3">
             <h3 className="text-lg font-semibold text-center">Choose Difficulty</h3>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {Object.entries(difficultySettings).map(([level, settings]) => (
                 <Card 
                   key={level}
@@ -119,7 +119,7 @@ export const SeriesSetupModal = ({ isOpen, onClose, onConfirm, isSinglePlayer }:
           {/* Topic Selection */}
           <div className="space-y-3">
             <h3 className="text-lg font-semibold text-center">Select Topic</h3>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {topics.map((topic) => (
                 <Card 
                   key={topic.id}
@@ -143,7 +143,7 @@ export const SeriesSetupModal = ({ isOpen, onClose, onConfirm, isSinglePlayer }:
           <div className="space-y-3">
             <h3 className="text-lg font-semibold text-center">Words Per Game</h3>
             <div className="flex justify-center">
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2 justify-center">
                 {[8, 12, 16, 20].map((count) => (
                   <Badge 
                     key={count}
