@@ -387,7 +387,11 @@ export const GameBoard = ({
 
             <Button
               variant="destructive"
-              onClick={onGameEnd}
+              onClick={() => onGameEnd({
+                score: getPlayerScore('1'),
+                totalWords: WORDS_TO_FIND.length,
+                timeElapsed: Math.floor((Date.now() - startTime) / 1000)
+              })}
               className="w-full"
             >
               End Game
